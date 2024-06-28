@@ -3,21 +3,27 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <unistd.h>
+
+
+// Global variables 
+const int stringSize = 20;
+const int libraryCapacity = 100; 
 
 typedef struct 
 {
-    char name[20];
-    char authorName[20];
+    char name[stringSize];
+    char authorName[stringSize];
     int year;
 } Book; 
 
 typedef struct 
 {
-    Book bookCollection[100]; 
+    Book bookCollection[libraryCapacity]; 
     int bookQuantity; 
 } Library;
 
-// Building functions
+// Fundamental functions
 void runLibrary(Library *Library);
 void loadInformation();
 void saveInformation();
@@ -25,10 +31,12 @@ void saveInformation();
 // Library manipulation funcitons
 void displayBookCollection(Library *library);
 void appendNewBook(Library *library, char bookName[], char authorName[], int year);
+void removingBook(Library *library, char bookName[]);
 
 // Additional functions
 void addingBookMenu(Library *library);
 void watchingBookCollectionMenu(Library *library);
+void removingBookMenu(Library *library); 
 
 int main()
 {
@@ -66,7 +74,7 @@ void runLibrary(Library *library)
         }
         else if(tolower(choice) == 'a')
         {
-            displayBookCollection(library);
+            watchingBookCollectionMenu(library);
         }
         else {printf("Enter valid input please!!!");}
     }
@@ -94,23 +102,28 @@ void appendNewBook(Library *library, char bookName[], char authorName[], int yea
     library->bookQuantity += 1;
 }
 
+void removingBook(Library *library, char bookName[])
+{
+
+}
+
 void addingBookMenu(Library *library)
 {
-    char name[20];
-    char authorName[20];
+    char name[stringSize];
+    char authorName[stringSize];
     int year;
 
     char choice; 
 
     printf("Enter book name: ");
-    fgets(name, 20, stdin);
+    fgets(name, stringSize, stdin);
 
     // clearing trailing new line 
     int length = strlen(name);
     name[length-1] = '\0';
 
     printf("Enter author's name: ");
-    fgets(authorName, 20, stdin);
+    fgets(authorName, stringSize, stdin);
 
     // clearing trailing new line 
     length = strlen(authorName);
@@ -128,14 +141,33 @@ void addingBookMenu(Library *library)
     // Clearing input buffer 
     int c;
     while((c = getchar()) != '\n') {}
-    
+
     // getting input
     scanf("%c", &choice);
     if(tolower(choice) == 'm') {}
     else {exit(0);}
+
+    sleep(1); // make transition between menues smooth 
 }
 
 void watchingBookCollectionMenu(Library *library)
+{
+    char choice; 
+
+    printf("Here is our book collection: \n");
+    displayBookCollection(library);
+
+    printf("In order to return to the main menu type -M-\n");
+    printf("To quit the library type -Q-\n");
+
+    scanf("%c", &choice);
+    if(tolower(choice) == 'm') {}
+    else {exit(0);}
+
+    sleep(1);
+}
+
+void removingBookMenu(Library *library)
 {
 
 }

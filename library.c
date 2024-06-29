@@ -165,7 +165,7 @@ void addingBookMenu(Library *library)
     // getting input
     scanf("%c", &choice);
     if(tolower(choice) == 'm') {}
-    else {exit(0);}
+    else {saveInformation(library); exit(0);}
 
     sleep(1); // make transition between menues smooth 
 }
@@ -182,7 +182,7 @@ void watchingBookCollectionMenu(Library *library)
 
     scanf("%c", &choice);
     if(tolower(choice) == 'm') {}
-    else {exit(0);}
+    else {saveInformation(library); exit(0);}
 
     sleep(1);
 }
@@ -205,7 +205,7 @@ void removingBookMenu(Library *library)
 
     scanf("%c", &choice);
     if(tolower(choice) == 'm') {}
-    else {exit(0);}
+    else {saveInformation(library); exit(0);}
 
     sleep(1);
 }
@@ -213,23 +213,42 @@ void removingBookMenu(Library *library)
 void loadInformation(Library *library)
 {
 
+
 }
 
 void saveInformation(Library *library)
 {
     FILE *file_output; 
-
     // Saving the number of books stored in the library
-    file_output = fopen("numberBooks.txt", "w");
-    fprintf(file_output, "%d\n", library->bookQuantity);
-    fclose(file_output); 
+    file_output = fopen("bookquantity.txt", "w");
+    // Checking if the file is opened 
+    if(file_output == NULL)
+    {
+        perror("Error opening numberBooks.txt");
+        return; 
+    }
+    fprintf(file_output, "%d\n", library->bookQuantity); // Saving quantity of books 
+    fclose(file_output); // closing file stream 
     
     // Saving books information 
     file_output = fopen("info.txt", "w");
-
-    fclose(file_output);
+    // Checking if the file is opened 
+    if(file_output == NULL)
+    {
+        perror("Error opening info.txt");
+        return; 
+    }
+    // Saving books to the file 
+    for(int i = 0; i < library->bookQuantity; i++)
+    {
+        fprintf(file_output, "%s\n", library->bookCollection[i].name);
+        fprintf(file_output, "%s\n", library->bookCollection[i].authorName);
+        fprintf(file_output, "%d\n", library->bookCollection[i].year);
+        fputs("\n", file_output);
+    }
+    fclose(file_output); // closing file stream 
 }
 
-// Features to add 
-// loading and saving information 
 
+// Complete Load Function 
+// Create additional folder to store info.txt and bookquantity.txt

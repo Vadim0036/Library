@@ -212,15 +212,63 @@ void removingBookMenu(Library *library)
 
 void loadInformation(Library *library)
 {
+    FILE *file; 
+    int bookQuantity = 0; 
+    char currentLine[256]; 
 
+    // Reading file with the number of books in the library 
+    file = fopen("/Users/vadim/Documents/Programming/C Program/Library/Data/bookquantity.txt", "r");
+    if(file == NULL)
+    {
+        perror("File was not found.\n");
+        return; 
+    }
+    fscanf(file, "%d", &bookQuantity);
+    library->bookQuantity = bookQuantity; // loading data into library variable
+    fclose(file); // closing file stream
 
+    // Reading books information from the saved file 
+    file = fopen("/Users/vadim/Documents/Programming/C Program/Library/Data/info.txt", "r");
+    if(file == NULL)
+    {   
+        perror("File was not found.\n");
+        return;
+    }
+    // reading through the file 
+    for(int i = 0; i < library->bookQuantity; i++)
+    {
+        int j = 0; 
+        while(j < 4 && fgets(currentLine, sizeof(currentLine), file) != NULL)
+        {
+            // removing \n from the end of the current line 
+            int length; 
+            length = strlen(currentLine);
+            currentLine[length - 1] = '\0';
+            
+            if(j == 0) 
+            {
+                strcpy(library->bookCollection[i].name, currentLine);
+            }
+            else if(j == 1) 
+            {
+                strcpy(library->bookCollection[i].authorName, currentLine);
+            }
+            else if(j == 2) 
+            {
+                library->bookCollection[i].year = atoi(currentLine); 
+            }
+            else {}
+            j++; 
+        }
+    }
+    fclose(file); // closing file stream
 }
 
 void saveInformation(Library *library)
 {
     FILE *file_output; 
     // Saving the number of books stored in the library
-    file_output = fopen("bookquantity.txt", "w");
+    file_output = fopen("/Users/vadim/Documents/Programming/C Program/Library/Data/bookquantity.txt", "w");
     // Checking if the file is opened 
     if(file_output == NULL)
     {
@@ -231,7 +279,7 @@ void saveInformation(Library *library)
     fclose(file_output); // closing file stream 
     
     // Saving books information 
-    file_output = fopen("info.txt", "w");
+    file_output = fopen("/Users/vadim/Documents/Programming/C Program/Library/Data/info.txt", "w");
     // Checking if the file is opened 
     if(file_output == NULL)
     {
@@ -248,7 +296,3 @@ void saveInformation(Library *library)
     }
     fclose(file_output); // closing file stream 
 }
-
-
-// Complete Load Function 
-// Create additional folder to store info.txt and bookquantity.txt

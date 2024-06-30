@@ -61,7 +61,7 @@ void runLibrary(Library *library)
 
     while(isOpen)
     {   
-        //system("clear"); 
+        system("clear"); 
         printf("\n\n\t\tSee Book Collection--A\n\t\tBring new Book--B\n\t\tRemove book--C\n\t\tQuit--D\n\n");
         scanf(" %c", &choice);
         int c;
